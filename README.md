@@ -3,8 +3,8 @@
 Implementação de um e-comerce para a matéria de programação III
 
 ### Metas
-- [ ] CRUD Produto
-- [ ] CRUD Cliente
+- [x] CRUD Produto
+- [x] CRUD Cliente
 - [ ] Login Cliente
 - [ ] Checkout
 - [ ] Admin
