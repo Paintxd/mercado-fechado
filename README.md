@@ -1,6 +1,6 @@
 # Mercado Fechado
 
-Implementação de um e-comerce para a matéria de programação III
+Implementação de um e-commerce para a matéria de programação III
 
 ### Metas
 - [x] CRUD Produto
