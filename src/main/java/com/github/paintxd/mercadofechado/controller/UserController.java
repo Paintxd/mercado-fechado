@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
     private static final String REDIRECT_HOME = "redirect:/user";
-    private static final String LOAD_HOME = "userCrud";
+    private static final String LOAD_HOME = "userCrud.jsp";
     private static final String FORM_ACTION = "action";
     UserRepository userRepository;
 

@@ -4,13 +4,19 @@ import com.github.paintxd.mercadofechado.model.Product;
 import com.github.paintxd.mercadofechado.model.User;
 import com.github.paintxd.mercadofechado.repository.ProductRepository;
 import com.github.paintxd.mercadofechado.repository.UserRepository;
+import com.sun.faces.config.ConfigureListener;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
+import javax.faces.webapp.FacesServlet;
 import java.time.LocalDate;
 
 @SpringBootApplication
@@ -23,6 +29,31 @@ public class MercadofechadoApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(MercadofechadoApplication.class, args);
+    }
+
+    @Bean
+    public ServletRegistrationBean facesServletRegistration() {
+        ServletRegistrationBean registration = new ServletRegistrationBean<>(new FacesServlet(), "*.xhtml");
+        registration.setLoadOnStartup(1);
+        registration.addUrlMappings("*.jr");
+        return registration;
+    }
+
+    @Bean
+    public ServletContextInitializer servletContextInitializer() {
+        return servletContext -> {
+            servletContext.setInitParameter("com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
+        };
+    }
+
+    @Bean
+    public ServletListenerRegistrationBean<ConfigureListener> jsfConfigureListener() {
+        return new ServletListenerRegistrationBean<ConfigureListener>(new ConfigureListener());
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
     @Bean

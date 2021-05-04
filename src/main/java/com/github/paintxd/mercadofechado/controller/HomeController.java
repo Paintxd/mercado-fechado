@@ -13,6 +13,11 @@ public class HomeController {
     public String renderHome(Model model, Locale locale) {
         System.out.println("Home Page Requested, locale = " + locale);
 
-        return "index";
+        return "index.jsp";
+    }
+
+    @GetMapping("/jsf")
+    public String renderJsf(Model model) {
+        return "teste.xhtml";
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/product")
 public class ProductController {
     private static final String REDIRECT_HOME = "redirect:/product";
-    private static final String LOAD_HOME = "productCrud";
+    private static final String LOAD_HOME = "productCrud.jsp";
     private static final String FORM_ACTION = "action";
     ProductRepository productRepository;
 
