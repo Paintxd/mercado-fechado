@@ -82,7 +82,7 @@ public class ProductDto {
         return new Product(name, type, description, price, stock, discountPercentage);
     }
 
-    public Product update(Product product) {
+    public Product update(Product product) throws Exception {
         product.setName(name);
         product.setDescription(description);
         product.setDiscountPercentage(discountPercentage);

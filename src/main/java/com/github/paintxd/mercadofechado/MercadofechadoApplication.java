@@ -1,9 +1,7 @@
 package com.github.paintxd.mercadofechado;
 
-import com.github.paintxd.mercadofechado.model.Product;
-import com.github.paintxd.mercadofechado.model.User;
-import com.github.paintxd.mercadofechado.repository.ProductRepository;
-import com.github.paintxd.mercadofechado.repository.UserRepository;
+import com.github.paintxd.mercadofechado.model.*;
+import com.github.paintxd.mercadofechado.repository.*;
 import com.sun.faces.config.ConfigureListener;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,6 +16,9 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.faces.webapp.FacesServlet;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class MercadofechadoApplication extends SpringBootServletInitializer {
@@ -57,7 +58,7 @@ public class MercadofechadoApplication extends SpringBootServletInitializer {
     }
 
     @Bean
-    public CommandLineRunner run(UserRepository userRepository, ProductRepository productRepository) {
+    public CommandLineRunner run(UserRepository userRepository, ProductRepository productRepository, PurchaseRepository purchaseRepository, PurchaseStatusRepository purchaseStatusRepository, PurchaseProductRepository purchaseProductRepository) {
         return (String[] args) -> {
             var carlim = new User("Carlos Da Silva", "01930291392", "Rua Tchurusbangotchurusbago, Bairro Nao sei 64 D", "carlossilva@gmail.com", LocalDate.of(2001, 9, 12), "159357");
             var joaozim = new User("João Augusto", "94039118392", "Rua Das Palmeiras, Bairro Top 44 E", "joao.augusto@gmail.com", LocalDate.of(1994, 9, 17), "123456");
@@ -70,6 +71,17 @@ public class MercadofechadoApplication extends SpringBootServletInitializer {
             productRepository.save(notibruik);
             productRepository.save(mousezim);
             productRepository.findAll().forEach(System.out::println);
+
+            var purchaseStatus = new PurchaseStatus(ActualPurchaseState.PENDING_PAYMENT, LocalDateTime.now());
+            purchaseStatusRepository.save(purchaseStatus);
+            List<PurchaseProduct> purchaseProducts = new ArrayList<>();
+            var purchase = new Purchase(carlim, purchaseStatus);
+            purchaseRepository.save(purchase);
+            purchaseProducts.add(new PurchaseProduct(notibruik, 2L, purchase));
+            purchaseProducts.add(new PurchaseProduct(mousezim, 2L, purchase));
+            purchaseProductRepository.saveAll(purchaseProducts);
+            purchase.setProductList(purchaseProducts);
+
         };
     }
 

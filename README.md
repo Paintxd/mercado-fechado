@@ -6,6 +6,7 @@ Implementação de um e-commerce para a matéria de programação III
 - [x] CRUD Produto
 - [x] CRUD Cliente
 - [ ] Login Cliente
-- [ ] Checkout
+- [ ] Carrinho
+- [x] Checkout
 - [ ] Admin
 - [ ] Relatorio Interativo

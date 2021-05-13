@@ -11,6 +11,7 @@
 <ul>
     <li><a href="user">Usuarios</a></li>
     <li><a href="product">Produtos</a></li>
+    <li><a href="purchases">Comprar</a> </li>
 </ul>
 
 </body>

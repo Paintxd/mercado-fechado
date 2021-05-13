@@ -4,17 +4,24 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String fullName;
+
     @Column(unique = true)
     private String document;
+
     private String address;
+
     @Column(unique = true)
     private String email;
+
     private LocalDate birthDate;
+
     private String password;
 
     public User() {

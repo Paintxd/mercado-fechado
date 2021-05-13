@@ -57,7 +57,7 @@ public class ProductController {
     }
 
     @PostMapping("/update/id/{id}")
-    public String updateProduct(@PathVariable("id") Long id, @ModelAttribute("product") @Validated ProductDto productDto, BindingResult result, Model model) {
+    public String updateProduct(@PathVariable("id") Long id, @ModelAttribute("product") @Validated ProductDto productDto, BindingResult result, Model model) throws Exception {
         if (result.hasErrors()) {
             model.addAttribute("product", productDto);
             model.addAttribute(FORM_ACTION, "/update/id/" + id);
