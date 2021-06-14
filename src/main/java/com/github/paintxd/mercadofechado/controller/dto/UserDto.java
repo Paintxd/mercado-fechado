@@ -6,19 +6,12 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 public class UserDto {
-    @NotEmpty(message = "Obrigatorio")
     private String firstName;
-    @NotEmpty(message = "Obrigatorio")
     private String lastName;
-    @Size(min = 6, message = "Senha deve ter no minimo 6 digitos")
     private String password;
-    @NotEmpty(message = "Obrigatorio")
     private String document;
-    @NotEmpty(message = "Obrigatorio")
     private String address;
-    @Email(message = "Deve ser um email valido")
     private String email;
-    @NotEmpty(message = "Obrigatorio")
     private String birthDate;
 
     public  UserDto() { }
@@ -93,7 +86,7 @@ public class UserDto {
     }
 
     public User parse() {
-        return new User(getFullName(), document, address, email, LocalDate.parse(birthDate), password);
+        return new User(getFullName(), document, address, email, LocalDate.of(2001, 9, 12), password);
     }
 
     public User update(User user) {

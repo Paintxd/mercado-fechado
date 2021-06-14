@@ -23,10 +23,10 @@ import java.util.List;
 @SpringBootApplication
 public class MercadofechadoApplication extends SpringBootServletInitializer {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(MercadofechadoApplication.class);
-    }
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        return builder.sources(MercadofechadoApplication.class);
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(MercadofechadoApplication.class, args);
@@ -36,7 +36,6 @@ public class MercadofechadoApplication extends SpringBootServletInitializer {
     public ServletRegistrationBean facesServletRegistration() {
         ServletRegistrationBean registration = new ServletRegistrationBean<>(new FacesServlet(), "*.xhtml");
         registration.setLoadOnStartup(1);
-        registration.addUrlMappings("*.jr");
         return registration;
     }
 
@@ -44,12 +43,13 @@ public class MercadofechadoApplication extends SpringBootServletInitializer {
     public ServletContextInitializer servletContextInitializer() {
         return servletContext -> {
             servletContext.setInitParameter("com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
+            servletContext.setInitParameter("primefaces.THEME", "luna-blue");
         };
     }
 
     @Bean
     public ServletListenerRegistrationBean<ConfigureListener> jsfConfigureListener() {
-        return new ServletListenerRegistrationBean<ConfigureListener>(new ConfigureListener());
+        return new ServletListenerRegistrationBean<>(new ConfigureListener());
     }
 
     @Bean

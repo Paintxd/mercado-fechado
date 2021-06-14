@@ -3,78 +3,68 @@ package com.github.paintxd.mercadofechado.controller;
 import com.github.paintxd.mercadofechado.controller.dto.UserDto;
 import com.github.paintxd.mercadofechado.model.User;
 import com.github.paintxd.mercadofechado.repository.UserRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Controller
-@RequestMapping("/user")
-public class UserController {
-    private static final String REDIRECT_HOME = "redirect:/user";
-    private static final String LOAD_HOME = "userCrud.jsp";
-    private static final String FORM_ACTION = "action";
-    UserRepository userRepository;
+import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
+import java.io.Serializable;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+@Named(value = "userB")
+@SessionScoped
+public class UserController implements Serializable {
+    private Iterable<User> userList;
+    private User user = new User();
+    private UserDto userDto = new UserDto();
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public UserController() {}
+
+    public User getUserById(Long id) {
+        this.user = userRepository.findById(id).orElse(new User());
+        System.out.println(user.getFullName());
+        return user;
     }
 
-    @GetMapping()
-    public String usersHome(Model model) {
-        model.addAttribute("userList", userRepository.findAll());
-        model.addAttribute("user", new UserDto());
-        model.addAttribute(FORM_ACTION, "save");
-
-        return LOAD_HOME;
+    public void saveUser() {
+        userRepository.save(user);
+        user = new User();
     }
 
-    @GetMapping("/id/{id}")
-    public String getUserById(@PathVariable("id") Long id, @Param("action") String action, Model model) {
-        var user = userRepository.findById(id).orElse(new User());
-
-        String formAction = action != null ? "update/id/" + id : "save";
-
-        model.addAttribute("userList", userRepository.findAll());
-        model.addAttribute("user", new UserDto(user));
-        model.addAttribute(FORM_ACTION, formAction);
-
-        return LOAD_HOME;
+    public void updateUser(Long id) {
+        user = userRepository.findById(id).orElse(new User());
     }
 
-    @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") @Validated UserDto user, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("user", user);
-            model.addAttribute(FORM_ACTION, "save");
-            return LOAD_HOME;
-        }
-        userRepository.save(user.parse());
-
-        return REDIRECT_HOME;
-    }
-
-    @PostMapping("/update/id/{id}")
-    public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") @Validated UserDto userDto, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("user", userDto);
-            model.addAttribute(FORM_ACTION, "/update/id/" + id);
-            return LOAD_HOME;
-        }
-        var user = userRepository.findById(id).orElseThrow();
-        userRepository.save(userDto.update(user));
-
-        return REDIRECT_HOME;
-    }
-
-    @GetMapping("/delete/id/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
+    public void deleteUser(Long id) {
         var user = userRepository.findById(id).orElseThrow();
         userRepository.delete(user);
-
-        return REDIRECT_HOME;
+    }
+    public void clearUser() {
+        user = new User();
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Iterable<User> getUserList() {
+        return userRepository.findAll();
+    }
+
+    public void setUserList(Iterable<User> userList) {
+        this.userList = userList;
+    }
+
+    public UserDto getUserDto() {
+        return userDto;
+    }
+
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
+    }
 }

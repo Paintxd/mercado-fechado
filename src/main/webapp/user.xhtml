@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <h:form name="breadCrump">
+        <p:breadCrumb>
+            <p:menuitem value="Home" url="index.xhtml"/>
+            <p:menuitem value="Usuario" url="#"/>
+        </p:breadCrumb>
+    </h:form>
+</h:head>
+<h:body style="background-color:#151414">
+    <p:panel style="width:70%; margin: 20px auto;" id="panel" header="Data">
+        <p:dataTable var="p" value="#{userB.userList}" scrollable="true" allowUnsorting="true" sortMode="single"
+                     scrollHeight="200">
+            <p:column sortBy="#{p.fullName}" headerText="Nome">
+                <p:outputLabel value="#{p.fullName}"/>
+            </p:column>
+
+            <p:column sortBy="#{p.birthDate}" headerText="Data Nascimento" width="140">
+                <p:outputLabel value="#{p.birthDate}">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                </p:outputLabel>
+            </p:column>
+
+            <p:column width="80">
+                <h:form>
+                    <p:commandButton icon="pi pi-pencil"
+                                     action="#{userB.updateUser(p.id)}" update="panelCad"/>
+                </h:form>
+            </p:column>
+        </p:dataTable>
+    </p:panel>
+
+    <p:panel id="panelCad" header="Cadastro" style="margin: 20px auto; width:40%;">
+        <h:form>
+
+            <p:growl id="growl" sticky="false" showDetail="false"/>
+            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+
+                <p:outputLabel value="Nome completo:"/>
+                <p:inputText value="#{userB.user.fullName}"/>
+
+                <p:outputLabel value="Endereço:"/>
+                <p:inputText value="#{userB.user.address}"/>
+
+
+                <h:outputLabel for="data" value="Data de Nascimento:"/>
+                <p:datePicker id="data" value="#{userB.user.birthDate}"
+                              showIcon="true" pattern="yyyy/MM/dd" yearNavigator="true" yearRange="1910:2002"/>
+
+                <p:outputLabel value="Documento:"/>
+                <p:inputText value="#{userB.user.document}"/>
+
+                <p:outputLabel value="Email:"/>
+                <p:inputText value="#{userB.user.email}"/>
+
+                <p:outputLabel value="Senha:"/>
+                <p:password id="toggle" value="#{userB.user.password}" toggleMask="true" redisplay="true"/>
+
+            </h:panelGrid>
+            <p:commandButton value="Salvar" icon="ui-icon-disk" update="panel panelCad"
+                             action="#{userB.saveUser}" style="margin-right:20px;"/>
+
+            <p:commandButton value="Limpar" action="#{userB.clearUser}" update="panelCad"/>
+        </h:form>
+    </p:panel>
+
+</h:body>
+
+</html>

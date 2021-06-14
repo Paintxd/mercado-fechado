@@ -2,6 +2,7 @@ package com.github.paintxd.mercadofechado.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "users")
@@ -72,8 +73,11 @@ public class User {
         this.email = email;
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
+    public String getBirthDate() {
+        if (birthDate == null) {
+            return null;
+        }
+        return birthDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     public void setBirthDate(LocalDate birthDate) {
