@@ -94,7 +94,6 @@ public class UserDto {
         user.setDocument(document);
         user.setAddress(address);
         user.setEmail(email);
-        user.setBirthDate(LocalDate.parse(birthDate));
         user.setPassword(password);
 
         return user;

@@ -15,7 +15,7 @@
     </h:form>
 </h:head>
 <h:body style="background-color:#151414">
-    <p:panel style="width:70%; margin: 20px auto;" id="panel" header="Data">
+    <p:panel style="width:70%; margin: 20px auto;" id="panel" header="Usuarios">
         <p:dataTable var="p" value="#{userB.userList}" scrollable="true" allowUnsorting="true" sortMode="single"
                      scrollHeight="200">
             <p:column sortBy="#{p.fullName}" headerText="Nome">
@@ -24,7 +24,7 @@
 
             <p:column sortBy="#{p.birthDate}" headerText="Data Nascimento" width="140">
                 <p:outputLabel value="#{p.birthDate}">
-                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    <f:convertDateTime pattern="dd/MM/yyyy" type="localDate"/>
                 </p:outputLabel>
             </p:column>
 
@@ -49,10 +49,12 @@
                 <p:outputLabel value="Endereço:"/>
                 <p:inputText value="#{userB.user.address}"/>
 
-
                 <h:outputLabel for="data" value="Data de Nascimento:"/>
                 <p:datePicker id="data" value="#{userB.user.birthDate}"
-                              showIcon="true" pattern="yyyy/MM/dd" yearNavigator="true" yearRange="1910:2002"/>
+                              showIcon="true" pattern="dd-MM-yyyy" mask="true" yearNavigator="true"
+                              monthNavigator="true">
+                    <f:convertDateTime pattern="dd-MM-yyyy" type="localDate"/>
+                </p:datePicker>
 
                 <p:outputLabel value="Documento:"/>
                 <p:inputText value="#{userB.user.document}"/>
@@ -66,8 +68,6 @@
             </h:panelGrid>
             <p:commandButton value="Salvar" icon="ui-icon-disk" update="panel panelCad"
                              action="#{userB.saveUser}" style="margin-right:20px;"/>
-
-            <p:commandButton value="Limpar" action="#{userB.clearUser}" update="panelCad"/>
         </h:form>
     </p:panel>
 

@@ -14,17 +14,14 @@ import java.io.Serializable;
 public class UserController implements Serializable {
     private Iterable<User> userList;
     private User user = new User();
-    private UserDto userDto = new UserDto();
 
     @Autowired
     private UserRepository userRepository;
 
     public UserController() {}
 
-    public User getUserById(Long id) {
+    public void getUserById(Long id) {
         this.user = userRepository.findById(id).orElse(new User());
-        System.out.println(user.getFullName());
-        return user;
     }
 
     public void saveUser() {
@@ -37,11 +34,8 @@ public class UserController implements Serializable {
     }
 
     public void deleteUser(Long id) {
-        var user = userRepository.findById(id).orElseThrow();
-        userRepository.delete(user);
-    }
-    public void clearUser() {
-        user = new User();
+        var userDelete = userRepository.findById(id).orElseThrow();
+        userRepository.delete(userDelete);
     }
 
     public User getUser() {
@@ -58,13 +52,5 @@ public class UserController implements Serializable {
 
     public void setUserList(Iterable<User> userList) {
         this.userList = userList;
-    }
-
-    public UserDto getUserDto() {
-        return userDto;
-    }
-
-    public void setUserDto(UserDto userDto) {
-        this.userDto = userDto;
     }
 }

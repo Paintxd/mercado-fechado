@@ -1,10 +1,15 @@
 package com.github.paintxd.mercadofechado.model;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "products")
-public class Product {
+public class Product implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1905122041950251207L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -74,8 +79,12 @@ public class Product {
         return stock;
     }
 
-    public void setStock(Long stock) throws  Exception {
-        if (stock > this.stock)
+    public void setStock(Long stock) {
+        this.stock = stock;
+    }
+
+    public void buyProduct(Long purchaseAmount) throws Exception {
+        if (purchaseAmount > this.stock)
             throw new Exception();
         this.stock -= stock;
     }

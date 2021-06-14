@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <h:form name="breadCrump">
+        <p:breadCrumb>
+            <p:menuitem value="Home" url="index.xhtml"/>
+            <p:menuitem value="Produto" url="#"/>
+        </p:breadCrumb>
+    </h:form>
+</h:head>
+<h:body style="background-color:#151414">
+    <p:panel style="width:70%; margin: 20px auto;" id="panel" header="Produtos">
+        <p:dataTable var="p" value="#{productB.productList}" scrollable="true" allowUnsorting="true" sortMode="single"
+                     scrollHeight="200">
+            <p:column sortBy="#{p.name}" headerText="Nome">
+                <p:outputLabel value="#{p.name}"/>
+            </p:column>
+
+            <p:column sortBy="#{p.type}" headerText="Tipo">
+                <p:outputLabel value="#{p.type}"/>
+            </p:column>
+
+            <p:column sortBy="#{p.price}" headerText="Valor">
+                <p:outputLabel value="R$ #{p.price}">
+
+                    <f:convertNumber pattern="#0.000"/>
+                </p:outputLabel>
+            </p:column>
+
+            <p:column sortBy="#{p.discountPercentage}" headerText="% Desconto">
+                <p:outputLabel value="#{p.discountPercentage}"/>
+            </p:column>
+
+            <p:column sortBy="#{p.stock}" headerText="Estoque">
+                <p:outputLabel value="#{p.stock}"/>
+            </p:column>
+
+            <p:column sortBy="#{p.description}" headerText="Descrição do produto">
+                <p:outputLabel value="#{p.description}"/>
+            </p:column>
+
+            <p:column width="80">
+                <h:form>
+                    <p:commandButton icon="pi pi-pencil"
+                                     action="#{productB.updateProduct(p.id)}" update="panelCad"/>
+                </h:form>
+            </p:column>
+        </p:dataTable>
+    </p:panel>
+
+    <p:panel id="panelCad" header="Cadastro" style="margin: 20px auto; width:40%;">
+        <h:form>
+
+            <p:growl id="growl" sticky="false" showDetail="false"/>
+            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+
+                <p:outputLabel value="Nome:"/>
+                <p:inputText value="#{productB.product.name}"/>
+
+                <p:outputLabel value="Tipo:"/>
+                <p:inputText value="#{productB.product.type}"/>
+
+                <p:outputLabel value="Valor:"/>
+                <p:inputText value="#{productB.product.price}"/>
+
+                <p:outputLabel value="Estoque:"/>
+                <p:inputText value="#{productB.product.stock}"/>
+
+                <p:outputLabel value="% Desconto:"/>
+                <p:inputText value="#{productB.product.discountPercentage}"/>
+
+                <p:outputLabel value="Descrição:"/>
+                <p:inputTextarea value="#{productB.product.description}" rows="5" cols="30" counter="display"
+                                 maxlength="2000"
+                                 counterTemplate="{0} letras restantes." autoResize="true"/>
+                <h:outputText id="display" class="p-d-block"/>
+
+            </h:panelGrid>
+            <p:commandButton value="Salvar" icon="ui-icon-disk" update="panel panelCad"
+                             action="#{productB.saveProduct}" style="margin-right:20px;"/>
+
+            <p:commandButton value="Limpar" action="#{productB.clearForm}" immediate="true"
+                             ajax="false" styleClass="p-mr-2 ui-button-outlined">
+                <p:resetInput target="panelCad"/>
+            </p:commandButton>
+        </h:form>
+    </p:panel>
+</h:body>
+</html>

@@ -1,12 +1,21 @@
 package com.github.paintxd.mercadofechado.model;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1905122041350251201L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -80,8 +89,11 @@ public class User {
         return birthDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthDate(String birthDate) throws ParseException {
+        var sdf = new SimpleDateFormat("dd/MM/yyyy");
+        var formatted = sdf.format(new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy", Locale.US).parse(birthDate));
+        var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.birthDate = LocalDate.parse(formatted, formatter);
     }
 
     public String getPassword() {

@@ -1,33 +1,39 @@
 package com.github.paintxd.mercadofechado.controller;
 
-import com.github.paintxd.mercadofechado.controller.dto.ProductDto;
 import com.github.paintxd.mercadofechado.model.Product;
 import com.github.paintxd.mercadofechado.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
+
+@Named(value = "productB")
+@SessionScoped
 public class ProductController {
     private Iterable<Product> productList;
     private Product product = new Product();
-    private ProductDto productDto = new ProductDto();
-    ProductRepository productRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public ProductController() {}
 
-    public ProductController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
     public void saveProduct() {
-        productRepository.save(productDto.parse());
+        productRepository.save(product);
+        product = new Product();
     }
 
-    public void updateProduct(Long id) throws Exception {
-        var product = productRepository.findById(id).orElseThrow();
-        productRepository.save(productDto.update(product));
+    public void updateProduct(Long id) {
+        product = productRepository.findById(id).orElse(new Product());
     }
 
     public void deleteProduct(Long id) {
-        var product = productRepository.findById(id).orElseThrow();
-        productRepository.delete(product);
+        var productDelete = productRepository.findById(id).orElseThrow();
+        productRepository.delete(productDelete);
+    }
+
+    public void clearForm() {
+        product = new Product();
     }
 
     public Iterable<Product> getProductList() {
@@ -44,13 +50,5 @@ public class ProductController {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public ProductDto getProductDto() {
-        return productDto;
-    }
-
-    public void setProductDto(ProductDto productDto) {
-        this.productDto = productDto;
     }
 }
