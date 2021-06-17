@@ -1,5 +1,6 @@
-package com.github.paintxd.mercadofechado.messaging;
+package com.github.paintxd.mercadofechado.config;
 
+import com.github.paintxd.mercadofechado.service.RabbitService;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

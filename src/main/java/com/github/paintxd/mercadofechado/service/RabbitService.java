@@ -1,4 +1,4 @@
-package com.github.paintxd.mercadofechado.messaging;
+package com.github.paintxd.mercadofechado.service;
 
 import com.github.paintxd.mercadofechado.controller.dto.PurchaseMessageDto;
 import org.springframework.amqp.core.Queue;

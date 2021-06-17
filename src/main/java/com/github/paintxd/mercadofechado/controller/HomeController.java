@@ -1,18 +1,20 @@
 package com.github.paintxd.mercadofechado.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import java.util.Locale;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-@Controller
+import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
+
+@Named(value = "homeB")
+@SessionScoped
 public class HomeController {
 
-    public String renderHome(Locale locale) {
-        System.out.println("Home Page Requested, locale = " + locale);
+    public String hello() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
 
-        return "index.jsp";
+        return "Bem vindo " + authentication.getName();
     }
 }

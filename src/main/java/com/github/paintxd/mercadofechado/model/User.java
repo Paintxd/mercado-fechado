@@ -1,5 +1,8 @@
 package com.github.paintxd.mercadofechado.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
@@ -7,12 +10,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User implements Serializable, UserDetails {
     @Serial
     private static final long serialVersionUID = 1905122041350251201L;
 
@@ -33,6 +38,10 @@ public class User implements Serializable {
     private LocalDate birthDate;
 
     private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "id_role", referencedColumnName = "id")
+    private Role role;
 
     public User() {
     }
@@ -96,12 +105,47 @@ public class User implements Serializable {
         this.birthDate = LocalDate.parse(formatted, formatter);
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<Role> roleList = new ArrayList<>();
+        if (role.getId() != 1)
+            roleList.add(new Role("user"));
+        roleList.add(role);
+        return roleList;
+    }
+
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override

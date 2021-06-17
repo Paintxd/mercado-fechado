@@ -1,6 +1,5 @@
 package com.github.paintxd.mercadofechado.controller;
 
-import com.github.paintxd.mercadofechado.controller.dto.UserDto;
 import com.github.paintxd.mercadofechado.model.User;
 import com.github.paintxd.mercadofechado.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

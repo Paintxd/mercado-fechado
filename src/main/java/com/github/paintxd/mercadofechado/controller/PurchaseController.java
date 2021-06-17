@@ -2,14 +2,17 @@ package com.github.paintxd.mercadofechado.controller;
 
 import com.github.paintxd.mercadofechado.controller.dto.PurchaseDto;
 import com.github.paintxd.mercadofechado.controller.dto.PurchaseMessageDto;
-import com.github.paintxd.mercadofechado.messaging.RabbitService;
+import com.github.paintxd.mercadofechado.service.RabbitService;
 import com.github.paintxd.mercadofechado.model.*;
 import com.github.paintxd.mercadofechado.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -17,21 +20,22 @@ import java.util.stream.StreamSupport;
 @RequestScoped
 public class PurchaseController {
     private PurchaseDto purchaseDto = new PurchaseDto();
+    private Map<Long, Long> productIdAmount = new HashMap<>();
 
-    PurchaseRepository purchaseRepository;
-    PurchaseProductRepository purchaseProductRepository;
-    PurchaseStatusRepository purchaseStatusRepository;
-    ProductRepository productRepository;
-    UserRepository userRepository;
-    RabbitService rabbitService;
+    @Autowired
+    private PurchaseRepository purchaseRepository;
+    @Autowired
+    private PurchaseProductRepository purchaseProductRepository;
+    @Autowired
+    private PurchaseStatusRepository purchaseStatusRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RabbitService rabbitService;
 
-    public PurchaseController(PurchaseRepository purchaseRepository, PurchaseProductRepository purchaseProductRepository, PurchaseStatusRepository purchaseStatusRepository, ProductRepository productRepository, UserRepository userRepository, RabbitService rabbitService) {
-        this.purchaseRepository = purchaseRepository;
-        this.purchaseProductRepository = purchaseProductRepository;
-        this.purchaseStatusRepository = purchaseStatusRepository;
-        this.productRepository = productRepository;
-        this.userRepository = userRepository;
-        this.rabbitService = rabbitService;
+    public PurchaseController() {
     }
 
     public void purchase(Long userId) {
@@ -41,10 +45,10 @@ public class PurchaseController {
 
         var purchase = purchaseRepository.save(new Purchase(user, purchaseStatus));
 
-        var products = this.productRepository.findAllById(purchaseDto.getProductIdAmount().keySet());
+        var products = this.productRepository.findAllById(productIdAmount.keySet());
         List<PurchaseProduct> purchaseProducts = StreamSupport.stream(products.spliterator(), true)
                 .map(product -> {
-                    var productAmount = purchaseDto.getProductIdAmount().get(product.getId());
+                    var productAmount = productIdAmount.get(product.getId());
                     return new PurchaseProduct(product, productAmount, purchase);
                 })
                 .collect(Collectors.toList());
@@ -54,11 +58,11 @@ public class PurchaseController {
     }
 
     public void addItem(Long productId, Long amount) {
-        purchaseDto.getProductIdAmount().put(productId, amount);
+        productIdAmount.put(productId, amount);
     }
 
     public void removeItem(Long productId) {
-        purchaseDto.getProductIdAmount().remove(productId);
+        productIdAmount.remove(productId);
     }
 
     public PurchaseDto getPurchaseDto() {

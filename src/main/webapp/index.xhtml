@@ -5,11 +5,22 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sec="http://www.springframework.org/security/tags">
 
 <h:head>
 </h:head>
 <h:body style="background-color:#151414">
+    <h:outputText value="#{homeB.hello()}" />
+    <div>
+        <sec:authorize access="hasRole('ROLE_USER')">
+            <p:outputLabel value="You have the USER role" />
+        </sec:authorize>
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <p:outputLabel value="You have the ADMIN role" />
+        </sec:authorize>
+    </div>
+
     <p:panel id="panelCad" header="Menu"
              style="margin: 20px auto; width:150px;">
         <p:linkButton outcome="user.xhtml" value="Usuarios" style="margin: 0 20px 10px 0; width:120px;" />
