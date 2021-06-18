@@ -39,20 +39,25 @@ public class User implements Serializable, UserDetails {
 
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "id_role", referencedColumnName = "id")
-    private Role role;
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
 
     public User() {
     }
 
-    public User(String fullName, String document, String address, String email, LocalDate birthDate, String password) {
+    public User(String fullName, String document, String address, String email, LocalDate birthDate, String password, List<Role> roles) {
         this.fullName = fullName;
         this.document = document;
         this.address = address;
         this.email = email;
         this.birthDate = birthDate;
         this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -91,6 +96,14 @@ public class User implements Serializable, UserDetails {
         this.email = email;
     }
 
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Role role) {
+        this.roles.add(role);
+    }
+
     public String getBirthDate() {
         if (birthDate == null) {
             return null;
@@ -111,11 +124,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<Role> roleList = new ArrayList<>();
-        if (role.getId() != 1)
-            roleList.add(new Role("user"));
-        roleList.add(role);
-        return roleList;
+        return roles;
     }
 
     @Override

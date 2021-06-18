@@ -6,12 +6,12 @@ import com.sun.faces.config.ConfigureListener;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
 import javax.faces.webapp.FacesServlet;
@@ -58,10 +58,17 @@ public class MercadofechadoApplication extends SpringBootServletInitializer {
     }
 
     @Bean
-    public CommandLineRunner run(UserRepository userRepository, ProductRepository productRepository, PurchaseRepository purchaseRepository, PurchaseStatusRepository purchaseStatusRepository, PurchaseProductRepository purchaseProductRepository) {
+    public CommandLineRunner run(UserRepository userRepository, ProductRepository productRepository, PurchaseRepository purchaseRepository, PurchaseStatusRepository purchaseStatusRepository, PurchaseProductRepository purchaseProductRepository, RoleRepository roleRepository) {
         return (String[] args) -> {
-            var carlim = new User("Carlos Da Silva", "01930291392", "Rua Tchurusbangotchurusbago, Bairro Nao sei 64 D", "carlossilva@gmail.com", LocalDate.of(2001, 9, 12), "159357");
-            var joaozim = new User("João Augusto", "94039118392", "Rua Das Palmeiras, Bairro Top 44 E", "joao.augusto@gmail.com", LocalDate.of(1994, 9, 17), "123456");
+            var bcrypt = new BCryptPasswordEncoder();
+
+            var admin = new Role("admin");
+            var user = new Role("user");
+            roleRepository.save(admin);
+            roleRepository.save(user);
+
+            var carlim = new User("Carlos Da Silva", "01930291392", "Rua Tchurusbangotchurusbago, Bairro Nao sei 64 D", "carlossilva@gmail.com", LocalDate.of(2001, 9, 12), bcrypt.encode("159357"), List.of(admin, user));
+            var joaozim = new User("João Augusto", "94039118392", "Rua Das Palmeiras, Bairro Top 44 E", "joao.augusto@gmail.com", LocalDate.of(1994, 9, 17), bcrypt.encode("123456"), List.of(user));
             userRepository.save(carlim);
             userRepository.save(joaozim);
             userRepository.findAll().forEach(System.out::println);
