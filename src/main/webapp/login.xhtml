@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
@@ -16,13 +17,12 @@
         <p:panelGrid columns="1" styleClass="ui-fluid center ui-noborder">
             <h2>Please login</h2>
 
-            <p:outputLabel value="Login failed!" styleClass="red"
-                           rendered="${!empty param['error']}" />
+            <p:messages id="loginFormMessages" autoUpdate="false"/>
 
-            <p:inputText id="email" placeholder="Email" />
-            <p:password id="password" placeholder="Senha" />
+            <p:inputText id="email" placeholder="Email" value="#{authB.email}"/>
+            <p:password id="password" placeholder="Senha" value="#{authB.password}"/>
 
-            <p:commandButton value="Login" ajax="false" />
+            <p:commandButton value="Login" action="#{authB.login}" update="loginFormMessages"/>
         </p:panelGrid>
 
     </h:form>

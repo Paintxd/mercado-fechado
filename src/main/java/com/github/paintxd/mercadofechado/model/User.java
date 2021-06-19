@@ -1,5 +1,9 @@
 package com.github.paintxd.mercadofechado.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,10 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -45,12 +46,13 @@ public class User implements Serializable, UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Set<Role> roles;
 
     public User() {
     }
 
-    public User(String fullName, String document, String address, String email, LocalDate birthDate, String password, List<Role> roles) {
+    public User(String fullName, String document, String address, String email, LocalDate birthDate, String password, Set<Role> roles) {
         this.fullName = fullName;
         this.document = document;
         this.address = address;
@@ -96,7 +98,7 @@ public class User implements Serializable, UserDetails {
         this.email = email;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 

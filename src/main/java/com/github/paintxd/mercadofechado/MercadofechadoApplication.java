@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 public class MercadofechadoApplication extends SpringBootServletInitializer {
@@ -67,8 +68,8 @@ public class MercadofechadoApplication extends SpringBootServletInitializer {
             roleRepository.save(admin);
             roleRepository.save(user);
 
-            var carlim = new User("Carlos Da Silva", "01930291392", "Rua Tchurusbangotchurusbago, Bairro Nao sei 64 D", "carlossilva@gmail.com", LocalDate.of(2001, 9, 12), bcrypt.encode("159357"), List.of(admin, user));
-            var joaozim = new User("João Augusto", "94039118392", "Rua Das Palmeiras, Bairro Top 44 E", "joao.augusto@gmail.com", LocalDate.of(1994, 9, 17), bcrypt.encode("123456"), List.of(user));
+            var carlim = new User("Carlos Da Silva", "01930291392", "Rua Tchurusbangotchurusbago, Bairro Nao sei 64 D", "carlossilva@gmail.com", LocalDate.of(2001, 9, 12), bcrypt.encode("159357"), Set.of(admin, user));
+            var joaozim = new User("João Augusto", "94039118392", "Rua Das Palmeiras, Bairro Top 44 E", "joao.augusto@gmail.com", LocalDate.of(1994, 9, 17), bcrypt.encode("123456"), Set.of(user));
             userRepository.save(carlim);
             userRepository.save(joaozim);
             userRepository.findAll().forEach(System.out::println);

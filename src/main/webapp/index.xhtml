@@ -11,7 +11,7 @@
 <h:head>
 </h:head>
 <h:body style="background-color:#151414">
-    <h:outputText value="#{homeB.hello()}" />
+    <h:outputText value="#{homeB.hello(authB.user.fullName)}" />
     <div>
         <sec:authorize access="hasRole('ROLE_USER')">
             <p:outputLabel value="You have the USER role" />

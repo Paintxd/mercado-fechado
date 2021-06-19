@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -35,7 +36,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
 //			.antMatchers("/resources/**").permitAll()
+                .antMatchers("login.xhtml").permitAll()
                 .antMatchers("/h2-console").anonymous()
+                .antMatchers("/index.xhtml").hasRole("user")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login.xhtml").successForwardUrl("/index.xhtml")
@@ -43,13 +46,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutSuccessUrl("/login.xhtml")
                 .and()
-                .csrf().disable();
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/**.xhtml", "/javax.faces.resource/**", "/h2-console");
+                .antMatchers("/javax.faces.resource/**", "/h2-console");
     }
 
 }
