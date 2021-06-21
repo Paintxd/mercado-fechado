@@ -5,6 +5,7 @@ import com.github.paintxd.mercadofechado.model.*;
 import com.github.paintxd.mercadofechado.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -15,8 +16,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Named(value = "purchaseB")
-@SessionScoped
+@RequestScoped
 public class PurchaseController implements Serializable {
+    private Iterable<Purchase> purchases;
     private Map<Product, Long> productAmount = new HashMap<>();
 
     private Long amount = 0L;
@@ -44,15 +46,25 @@ public class PurchaseController implements Serializable {
 
         var purchaseStatus = purchaseStatusRepository.save(new PurchaseStatus(ActualPurchaseState.PENDING_PAYMENT, LocalDateTime.now()));
 
-        var purchase = purchaseRepository.save(new Purchase(user, purchaseStatus));
+        var purchase = new Purchase(user, purchaseStatus);
 
         var products = productAmount.keySet();
         List<PurchaseProduct> purchaseProducts = products.parallelStream()
                 .map(product -> {
-                    var productAmount = this.productAmount.get(product);
-                    return new PurchaseProduct(product, productAmount, purchase);
+                    var buyAmount = this.productAmount.get(product);
+                    try {
+                        product.buyProduct(buyAmount);
+                        productRepository.save(product);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    var purchaseProduct = new PurchaseProduct(product, buyAmount, purchase);
+
+                    purchase.setPrice(purchaseProduct.getPrice());
+                    return purchaseProduct;
                 })
                 .collect(Collectors.toList());
+        purchaseRepository.save(purchase);
         this.purchaseProductRepository.saveAll(purchaseProducts);
 
         productAmount.clear();
@@ -95,5 +107,13 @@ public class PurchaseController implements Serializable {
 
     public void setCartProducts(String cartProducts) {
         this.cartProducts = cartProducts;
+    }
+
+    public Iterable<Purchase> getPurchases() {
+        return purchaseRepository.findAll();
+    }
+
+    public void setPurchases(Iterable<Purchase> purchases) {
+        this.purchases = purchases;
     }
 }

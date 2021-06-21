@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <h:form name="breadCrump">
+        <p:breadCrumb>
+            <p:menuitem value="Admin" url="admin.xhtml"/>
+            <p:menuitem value="Produto" url="#"/>
+        </p:breadCrumb>
+    </h:form>
+</h:head>
+<h:body style="background-color:#151414">
+    <p:panel style="width:70%; margin: 20px auto;" id="panel" header="Compras">
+        <p:dataTable var="p" value="#{purchaseB.purchases}" scrollable="true" allowUnsorting="true" sortMode="single">
+            <p:column sortBy="#{p.user.document}" headerText="Documento Comprador">
+                <p:outputLabel value="#{p.user.document}"/>
+            </p:column>
+
+            <p:column sortBy="#{p.price}" headerText="Valor Compra">
+                <p:outputLabel value="R$ #{p.price}">
+
+                    <f:convertNumber pattern="#0.000"/>
+                </p:outputLabel>
+            </p:column>
+
+            <p:column sortBy="#{p.purchaseStatus.actualState}" headerText="Status">
+                <p:outputLabel value="#{p.purchaseStatus.actualState}"/>
+            </p:column>
+        </p:dataTable>
+    </p:panel>
+</h:body>
+</html>

@@ -14,7 +14,7 @@
             <p:menuitem value="Admin" url="#"/>
         </p:breadCrumb>
         <p:commandButton value="Logout" action="#{authB.logoutAction}" immediate="true"
-                         ajax="false" styleClass="p-mr-2 ui-button-outlined" />
+                         ajax="false" styleClass="p-mr-2 ui-button-outlined"/>
     </h:form>
 </h:head>
 <h:body style="background-color:#151414">
@@ -26,6 +26,7 @@
              style="margin: 20px auto; width:150px;">
         <p:linkButton outcome="user.xhtml" value="Usuarios" style="margin: 0 20px 10px 0; width:120px;"/>
         <p:linkButton outcome="product.xhtml" value="Produtos" style="margin: 0 20px 10px 0; width:120px;"/>
+        <p:linkButton outcome="purchases.xhtml" value="Compras" style="margin: 0 20px 10px 0; width:120px;"/>
     </p:panel>
 </h:body>
 </html>

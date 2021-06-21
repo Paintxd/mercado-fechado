@@ -20,7 +20,7 @@ public class Purchase implements Serializable {
     private User user;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "purchase")
-    private List<PurchaseProduct> productList = new ArrayList<PurchaseProduct>();
+    private List<PurchaseProduct> productList = new ArrayList<>();
 
     @OneToOne()
     private PurchaseStatus purchaseStatus;
@@ -37,9 +37,6 @@ public class Purchase implements Serializable {
         this.purchaseStatus = purchaseStatus;
         this.date = LocalDateTime.now();
         this.price = 0.0;
-        productList.forEach(product -> {
-            this.price += product.getPrice();
-        });
     }
 
     public Long getId() {
@@ -83,7 +80,7 @@ public class Purchase implements Serializable {
     }
 
     public void setPrice(Double price) {
-        this.price = price;
+        this.price += price;
     }
 
     public void addProduct(PurchaseProduct product) {
