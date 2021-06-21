@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <h:form id="cart">
+        <p:growl id="messages"/>
+
+        <p:menubar>
+            <p:menuitem value="#{homeB.hello()}" icon="pi pi-user"
+                        disabled="true"/>
+
+            <p:menuitem value="Admin Panel" icon="pi pi-fw pi-user"
+                        rendered="#{authB.admin}"
+                        url="admin.xhtml"/>
+            <p:menuitem value="#{purchaseB.cartProducts}" icon="pi pi-shopping-cart"
+                        url="#"/>
+
+            <f:facet name="options">
+                <p:commandButton value="Logout" icon="pi pi-fw pi-sign-out" styleClass="ui-button-info"
+                                 action="#{authB.logoutAction()}"/>
+            </f:facet>
+        </p:menubar>
+    </h:form>
+
+    <h:form name="breadCrump">
+        <p:breadCrumb>
+            <p:menuitem value="Home" url="index.xhtml"/>
+            <p:menuitem value="Carrinho" url="#"/>
+        </p:breadCrumb>
+    </h:form>
+</h:head>
+<h:body style="background-color:#151414">
+    <p:panel style="width:70%; margin: 20px auto;" id="panel" header="Carrinho">
+        <p:dataTable var="p" value="#{purchaseB.productAmount.keySet()}" scrollable="true" allowUnsorting="true"
+                     sortMode="single"
+        >
+            <p:column sortBy="#{p.name}" headerText="Nome">
+                <p:outputLabel value="#{p.name}"/>
+            </p:column>
+
+            <p:column sortBy="#{p.price}" headerText="Valor">
+                <p:outputLabel value="R$ #{p.price}">
+
+                    <f:convertNumber pattern="#0.000"/>
+                </p:outputLabel>
+            </p:column>
+
+            <p:column sortBy="#{purchaseB.productAmount.get(p)}" headerText="Quantia">
+                <p:outputLabel value="#{purchaseB.productAmount.get(p)}"/>
+            </p:column>
+        </p:dataTable>
+        <h:form>
+            <p:commandButton icon="pi pi-wallet" value="Confirmar Compra"
+                             action="#{purchaseB.purchase(authB.user.id)}" update="panel cart"/>
+        </h:form>
+    </p:panel>
+
+</h:body>
+</html>

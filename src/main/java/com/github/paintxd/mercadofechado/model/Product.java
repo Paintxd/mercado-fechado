@@ -3,6 +3,7 @@ package com.github.paintxd.mercadofechado.model;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "products")
@@ -101,6 +102,19 @@ public class Product implements Serializable {
         return discountPercentage > 0
                 ? price - (price * discountPercentage / 100)
                 : price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(type, product.type) && Objects.equals(description, product.description) && Objects.equals(price, product.price) && Objects.equals(stock, product.stock) && Objects.equals(discountPercentage, product.discountPercentage);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, type, description, price, stock, discountPercentage);
     }
 
     @Override

@@ -68,16 +68,18 @@ public class MercadofechadoApplication extends SpringBootServletInitializer {
             roleRepository.save(admin);
             roleRepository.save(user);
 
-            var carlim = new User("Carlos Da Silva", "01930291392", "Rua Tchurusbangotchurusbago, Bairro Nao sei 64 D", "carlossilva@gmail.com", LocalDate.of(2001, 9, 12), bcrypt.encode("159357"), Set.of(admin, user));
-            var joaozim = new User("João Augusto", "94039118392", "Rua Das Palmeiras, Bairro Top 44 E", "joao.augusto@gmail.com", LocalDate.of(1994, 9, 17), bcrypt.encode("123456"), Set.of(user));
+            var carlim = new User("Carlos Da Silva", "01930291392", "Rua Tchurusbangotchurusbago, Bairro Nao sei 64 D", "admin@gmail.com", LocalDate.of(2001, 9, 12), bcrypt.encode("159357"), Set.of(admin, user));
+            var joaozim = new User("João Augusto", "94039118392", "Rua Das Palmeiras, Bairro Top 44 E", "user@gmail.com", LocalDate.of(1994, 9, 17), bcrypt.encode("123456"), Set.of(user));
             userRepository.save(carlim);
             userRepository.save(joaozim);
             userRepository.findAll().forEach(System.out::println);
 
             var notibruik = new Product("Notebook top", "eletronico", "esse notebook é zika d+ se loko", 3890.40, 19L, 0L);
             var mousezim = new Product("Mouse RGBT", "periferico", "é top, confia", 173.50, 23L, 5L);
+            var cadeira = new Product("Cadeira Gaymer", "cadeira", "cadeira de courinho top hmhm", 999.90, 4L, 12L);
             productRepository.save(notibruik);
             productRepository.save(mousezim);
+            productRepository.save(cadeira);
             productRepository.findAll().forEach(System.out::println);
 
             var purchaseStatus = new PurchaseStatus(ActualPurchaseState.PENDING_PAYMENT, LocalDateTime.now());

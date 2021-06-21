@@ -1,26 +1,27 @@
 package com.github.paintxd.mercadofechado.controller;
 
-import com.github.paintxd.mercadofechado.controller.dto.PurchaseDto;
-import com.github.paintxd.mercadofechado.controller.dto.PurchaseMessageDto;
 import com.github.paintxd.mercadofechado.service.RabbitService;
 import com.github.paintxd.mercadofechado.model.*;
 import com.github.paintxd.mercadofechado.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-@ManagedBean(name = "PurchaseMB")
-@RequestScoped
-public class PurchaseController {
-    private PurchaseDto purchaseDto = new PurchaseDto();
-    private Map<Long, Long> productIdAmount = new HashMap<>();
+@Named(value = "purchaseB")
+@SessionScoped
+public class PurchaseController implements Serializable {
+    private Map<Product, Long> productAmount = new HashMap<>();
+
+    private Long amount = 0L;
+
+    private String cartProducts = "Carrinho: " + productAmount.size() + " Itens";
 
     @Autowired
     private PurchaseRepository purchaseRepository;
@@ -38,38 +39,61 @@ public class PurchaseController {
     public PurchaseController() {
     }
 
-    public void purchase(Long userId) {
+    public String purchase(Long userId) {
         var user = userRepository.findById(userId).orElseThrow();
 
         var purchaseStatus = purchaseStatusRepository.save(new PurchaseStatus(ActualPurchaseState.PENDING_PAYMENT, LocalDateTime.now()));
 
         var purchase = purchaseRepository.save(new Purchase(user, purchaseStatus));
 
-        var products = this.productRepository.findAllById(productIdAmount.keySet());
-        List<PurchaseProduct> purchaseProducts = StreamSupport.stream(products.spliterator(), true)
+        var products = productAmount.keySet();
+        List<PurchaseProduct> purchaseProducts = products.parallelStream()
                 .map(product -> {
-                    var productAmount = productIdAmount.get(product.getId());
+                    var productAmount = this.productAmount.get(product);
                     return new PurchaseProduct(product, productAmount, purchase);
                 })
                 .collect(Collectors.toList());
         this.purchaseProductRepository.saveAll(purchaseProducts);
 
-        rabbitService.send(new PurchaseMessageDto(purchase.getId(), purchaseStatus.getId(), user.getId()));
+        productAmount.clear();
+        cartProducts = "Carrinho: " + productAmount.size() + " Itens";
+        return "/index.xhtml?faces-redirect=true";
+//        rabbitService.send(new PurchaseMessageDto(purchase.getId(), purchaseStatus.getId(), user.getId()));
     }
 
-    public void addItem(Long productId, Long amount) {
-        productIdAmount.put(productId, amount);
+    public void addProductCart(Product product) {
+        if (amount < 1) return;
+
+        if (product.getStock() < amount || productAmount.get(product) != null && product.getStock() < (productAmount.get(product) + amount))
+            return;
+
+        System.out.println("Product add to cart amount: " + amount);
+        productAmount.put(product, amount);
+        amount = 0L;
+        cartProducts = "Carrinho: " + productAmount.size() + " Itens";
     }
 
-    public void removeItem(Long productId) {
-        productIdAmount.remove(productId);
+    public Map<Product, Long> getProductAmount() {
+        return productAmount;
     }
 
-    public PurchaseDto getPurchaseDto() {
-        return purchaseDto;
+    public void setProductAmount(Map<Product, Long> productAmount) {
+        this.productAmount = productAmount;
     }
 
-    public void setPurchaseDto(PurchaseDto purchaseDto) {
-        this.purchaseDto = purchaseDto;
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
+
+    public String getCartProducts() {
+        return cartProducts;
+    }
+
+    public void setCartProducts(String cartProducts) {
+        this.cartProducts = cartProducts;
     }
 }

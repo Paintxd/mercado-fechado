@@ -38,7 +38,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //			.antMatchers("/resources/**").permitAll()
                 .antMatchers("login.xhtml").permitAll()
                 .antMatchers("/h2-console").anonymous()
-                .antMatchers("/index.xhtml").hasRole("user")
+                .antMatchers("index.xhtml").authenticated()
+                .antMatchers("/admin.xhtml").hasRole("admin")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login.xhtml").successForwardUrl("/index.xhtml")
@@ -53,7 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/javax.faces.resource/**", "/h2-console");
+                .antMatchers("/*.xhtml", "/javax.faces.resource/**", "/h2-console");
     }
 
 }

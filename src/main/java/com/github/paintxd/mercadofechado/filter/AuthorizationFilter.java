@@ -32,8 +32,7 @@ public class AuthorizationFilter implements Filter {
 
         HttpServletRequest rqt = (HttpServletRequest) request;
 
-        if (user == null && (rqt.getRequestURI().indexOf("login.xhtml") <= 0)
-                && (rqt.getRequestURI().indexOf("home.xhtml") <= 0)) {
+        if (user == null && (rqt.getRequestURI().indexOf("login.xhtml") <= 0)) {
             String contextPath = rqt.getContextPath();
 
             ((HttpServletResponse) response).sendRedirect(contextPath + "/login.xhtml");
