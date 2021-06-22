@@ -7,6 +7,24 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+    <h:form id="cart">
+        <p:growl id="messages"/>
+
+        <p:menubar>
+            <p:menuitem value="#{homeB.hello()}" icon="pi pi-user"
+                        disabled="true"/>
+
+            <p:menuitem value="Admin Panel" icon="pi pi-fw pi-user"
+                        rendered="#{authB.admin}"
+                        url="admin.xhtml"/>
+
+            <f:facet name="options">
+                <p:commandButton value="Logout" icon="pi pi-fw pi-sign-out" styleClass="ui-button-info"
+                                 action="#{authB.logoutAction()}"/>
+            </f:facet>
+        </p:menubar>
+    </h:form>
+
     <h:form name="breadCrump">
         <p:breadCrumb>
             <p:menuitem value="Admin" url="admin.xhtml"/>

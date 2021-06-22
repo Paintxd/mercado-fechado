@@ -7,54 +7,14 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <h:form id="cart">
-        <p:growl id="messages"/>
-
-        <p:menubar>
-            <p:menuitem value="#{homeB.hello()}" icon="pi pi-user"
-                        disabled="true"/>
-
-            <p:menuitem value="Admin Panel" icon="pi pi-fw pi-user"
-                        rendered="#{authB.admin}"
-                        url="admin.xhtml"/>
-
-            <f:facet name="options">
-                <p:commandButton value="Logout" icon="pi pi-fw pi-sign-out" styleClass="ui-button-info"
-                                 action="#{authB.logoutAction()}"/>
-            </f:facet>
-        </p:menubar>
-    </h:form>
-
     <h:form name="breadCrump">
         <p:breadCrumb>
-            <p:menuitem value="Admin" url="admin.xhtml"/>
-            <p:menuitem value="Usuario" url="#"/>
+            <p:menuitem value="Login" url="login.xhtml"/>
+            <p:menuitem value="Cadastro" url="#"/>
         </p:breadCrumb>
     </h:form>
 </h:head>
 <h:body style="background-color:#151414">
-    <p:panel style="width:70%; margin: 20px auto;" id="panel" header="Usuarios">
-        <p:dataTable var="p" value="#{userB.userList}" scrollable="true" allowUnsorting="true" sortMode="single"
-                     scrollHeight="200">
-            <p:column sortBy="#{p.fullName}" headerText="Nome">
-                <p:outputLabel value="#{p.fullName}"/>
-            </p:column>
-
-            <p:column sortBy="#{p.birthDate}" headerText="Data Nascimento" width="140">
-                <p:outputLabel value="#{p.birthDate}">
-                    <f:convertDateTime pattern="dd/MM/yyyy" type="localDate"/>
-                </p:outputLabel>
-            </p:column>
-
-            <p:column width="80">
-                <h:form>
-                    <p:commandButton icon="pi pi-pencil"
-                                     action="#{userB.updateUser(p.id)}" update="panelCad"/>
-                </h:form>
-            </p:column>
-        </p:dataTable>
-    </p:panel>
-
     <p:panel id="panelCad" header="Cadastro" style="margin: 20px auto; width:40%;">
         <h:form>
 

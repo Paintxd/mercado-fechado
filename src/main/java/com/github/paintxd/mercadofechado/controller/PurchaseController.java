@@ -25,6 +25,8 @@ public class PurchaseController implements Serializable {
 
     private String cartProducts = "Carrinho: " + productAmount.size() + " Itens";
 
+    private Double purchaseTotalPrice = 0.0;
+
     @Autowired
     private PurchaseRepository purchaseRepository;
     @Autowired
@@ -69,8 +71,9 @@ public class PurchaseController implements Serializable {
 
         productAmount.clear();
         cartProducts = "Carrinho: " + productAmount.size() + " Itens";
-        return "/index.xhtml?faces-redirect=true";
+        purchaseTotalPrice = 0.0;
 //        rabbitService.send(new PurchaseMessageDto(purchase.getId(), purchaseStatus.getId(), user.getId()));
+        return "/index.xhtml?faces-redirect=true";
     }
 
     public void addProductCart(Product product) {
@@ -81,6 +84,7 @@ public class PurchaseController implements Serializable {
 
         System.out.println("Product add to cart amount: " + amount);
         productAmount.put(product, amount);
+        purchaseTotalPrice += product.getTotalPrice(amount);
         amount = 0L;
         cartProducts = "Carrinho: " + productAmount.size() + " Itens";
     }
@@ -115,5 +119,13 @@ public class PurchaseController implements Serializable {
 
     public void setPurchases(Iterable<Purchase> purchases) {
         this.purchases = purchases;
+    }
+
+    public Double getPurchaseTotalPrice() {
+        return purchaseTotalPrice;
+    }
+
+    public void setPurchaseTotalPrice(Double purchaseTotalPrice) {
+        this.purchaseTotalPrice = purchaseTotalPrice;
     }
 }

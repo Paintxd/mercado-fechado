@@ -7,6 +7,14 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+    <style type="text/css">
+        .confirmaCompra {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 10px 0;
+        }
+    </style>
+
     <h:form id="cart">
         <p:growl id="messages"/>
 
@@ -43,9 +51,8 @@
                 <p:outputLabel value="#{p.name}"/>
             </p:column>
 
-            <p:column sortBy="#{p.price}" headerText="Valor">
-                <p:outputLabel value="R$ #{p.price}">
-
+            <p:column sortBy="#{p.getPriceDiscount()}" headerText="Valor Produto">
+                <p:outputLabel value="R$ #{p.getPriceDiscount()}">
                     <f:convertNumber pattern="#0.000"/>
                 </p:outputLabel>
             </p:column>
@@ -53,10 +60,24 @@
             <p:column sortBy="#{purchaseB.productAmount.get(p)}" headerText="Quantia">
                 <p:outputLabel value="#{purchaseB.productAmount.get(p)}"/>
             </p:column>
+
+            <p:column sortBy="#{p.getgetTotalPrice(purchaseB.productAmount.get(p))}" headerText="Valor Total">
+                <p:outputLabel value="R$ #{p.getTotalPrice(purchaseB.productAmount.get(p))}">
+
+                    <f:convertNumber pattern="#0.000"/>
+                </p:outputLabel>
+            </p:column>
         </p:dataTable>
+    </p:panel>
+
+    <p:panel style="width:20%; margin: 20px auto;" id="panelConfirm" header="Confirmar Compra">
+        <p:outputLabel value="Valor Compra: R$ #{purchaseB.purchaseTotalPrice}" styleClass="confirmaCompra">
+            <f:convertNumber pattern="#0.000"/>
+        </p:outputLabel>
+        
         <h:form>
-            <p:commandButton icon="pi pi-wallet" value="Confirmar Compra"
-                             action="#{purchaseB.purchase(authB.user.id)}" update="panel cart"/>
+            <p:commandButton icon="pi pi-wallet" value="Confirmar Compra" styleClass="confirmaCompra"
+                             action="#{purchaseB.purchase(authB.user.id)}" update="panel cart panelConfirm"/>
         </h:form>
     </p:panel>
 

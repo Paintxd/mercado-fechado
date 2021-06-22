@@ -7,23 +7,33 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+    <style type="text/css">
+        form {
+            margin: 0 auto;
+            width: 250px;
+        }
+    </style>
+
     <title>Login</title>
 </h:head>
 
 <h:body style="background-color:#151414">
-    <h:form prependId="false">
+    <div class="card ui-fluid ">
+        <h:form prependId="false">
 
-        <p:panelGrid columns="1" styleClass="ui-fluid center ui-noborder">
-            <h2>Login</h2>
+            <p:panelGrid columns="1" styleClass="ui-fluid center ui-noborder">
+                <h2>Login</h2>
 
-            <p:messages id="loginFormMessages" autoUpdate="false"/>
+                <p:messages id="loginFormMessages" autoUpdate="false"/>
 
-            <p:inputText id="email" placeholder="Email" value="#{authB.email}"/>
-            <p:password id="password" placeholder="Senha" value="#{authB.password}"/>
+                <p:inputText id="email" placeholder="Email" value="#{authB.email}"/>
+                <p:password id="password" placeholder="Senha" value="#{authB.password}"/>
 
-            <p:commandButton value="Login" action="#{authB.login}" update="loginFormMessages"/>
-        </p:panelGrid>
+                <p:commandButton value="Login" action="#{authB.login}" update="loginFormMessages"/>
+                <p:linkButton value="Cadastro" outcome="purchases.xhtml" />
+            </p:panelGrid>
 
-    </h:form>
+        </h:form>
+    </div>
 </h:body>
 </html>

@@ -1,6 +1,7 @@
 package com.github.paintxd.mercadofechado.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -102,6 +103,10 @@ public class Product implements Serializable {
         return discountPercentage > 0
                 ? price - (price * discountPercentage / 100)
                 : price;
+    }
+
+    public Double getTotalPrice(Long amount) {
+        return getPriceDiscount() * amount;
     }
 
     @Override

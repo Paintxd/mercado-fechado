@@ -8,20 +8,32 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+    <h:form id="cart">
+        <p:growl id="messages"/>
+
+        <p:menubar>
+            <p:menuitem value="#{homeB.hello()}" icon="pi pi-user"
+                        disabled="true"/>
+
+            <p:menuitem value="Admin Panel" icon="pi pi-fw pi-user"
+                        rendered="#{authB.admin}"
+                        url="admin.xhtml"/>
+
+            <f:facet name="options">
+                <p:commandButton value="Logout" icon="pi pi-fw pi-sign-out" styleClass="ui-button-info"
+                                 action="#{authB.logoutAction()}"/>
+            </f:facet>
+        </p:menubar>
+    </h:form>
+
     <h:form name="breadCrump">
         <p:breadCrumb>
             <p:menuitem value="Home" url="index.xhtml"/>
             <p:menuitem value="Admin" url="#"/>
         </p:breadCrumb>
-        <p:commandButton value="Logout" action="#{authB.logoutAction}" immediate="true"
-                         ajax="false" styleClass="p-mr-2 ui-button-outlined"/>
     </h:form>
 </h:head>
 <h:body style="background-color:#151414">
-    <div>
-        <p:outputLabel rendered="#{authB.admin}" value="You have the ADMIN role"/>
-    </div>
-
     <p:panel id="panelCad" header="Menu"
              style="margin: 20px auto; width:150px;">
         <p:linkButton outcome="user.xhtml" value="Usuarios" style="margin: 0 20px 10px 0; width:120px;"/>
